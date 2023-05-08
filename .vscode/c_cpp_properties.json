@@ -10,6 +10,7 @@
                 "${config:idf.espAdfPathWin}/components/**",
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/experimental_cpp_component/include/*",
+                "${workspaceFolder}/components/include/*",
                 "${workspaceFolder}/build/**"
             ],
             "browse": {
@@ -19,8 +20,8 @@
                     "${config:idf.espAdfPath}/components/**",
                     "${config:idf.espAdfPathWin}/components/**",
                     "${workspaceFolder}",
-                    "${workspaceFolder}/experimental_cpp_component",
                     "${workspaceFolder}/experimental_cpp_component/include/*",
+                    "${workspaceFolder}/components/include/*",
                     "${workspaceFolder}/build/**"
                 ],
                 "limitSymbolsToIncludedHeaders": false
