@@ -1,7 +1,7 @@
 #ifndef ESP_NVS_CXX_HPP_
 #define ESP_NVS_CXX_HPP_
 
-namespace cxx {
+namespace nvs_cxx {
     void init();
     
 }

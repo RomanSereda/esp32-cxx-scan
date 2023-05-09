@@ -1,9 +1,15 @@
-#include <cstdlib>
-#include <thread>
-#include "esp_log.h"
 #include "nvs_cxx.hpp"
+#include "wlx_cxx.hpp"
+
+static wlx_cxx::wifi wifi;
 
 extern "C" void app_main(void)
 {
-    cxx::init();
+    nvs_cxx::init();
+
+    wifi.init();
+    wifi.create_sta();
+
+
+
 }
