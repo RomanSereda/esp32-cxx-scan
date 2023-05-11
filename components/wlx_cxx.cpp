@@ -19,6 +19,16 @@ void wifi::create_sta()
     ESP_ERROR_CHECK(esp_wifi_start());
 }
 
+void wifi::scan()
+{
+    uint16_t size = 64;
+    uint16_t ap_count = 0;
+    wifi_ap_record_t ap_info[size] = {0};
+
+    ESP_ERROR_CHECK(esp_wifi_scan_get_ap_records(&size, ap_info));
+    ESP_ERROR_CHECK(esp_wifi_scan_get_ap_num(&ap_count));
+}
+
 void wifi::destroy()
 {
     ESP_ERROR_CHECK(esp_wifi_stop());

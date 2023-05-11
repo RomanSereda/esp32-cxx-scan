@@ -9,7 +9,7 @@ class wifi
 public:
     void init();
     void create_sta();
-
+    void scan();
     void destroy();
 
 private:
