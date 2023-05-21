@@ -2,8 +2,6 @@
 #include <cstring>
 #include "esp_log.h"
 
-static const char *TAG = "wenvmitter";
-
 namespace wlx_cxx {
 void wifi::init()
 {
@@ -86,7 +84,11 @@ void wifi::print()
 {
     for(auto it = m_scan_data.begin(); it != m_scan_data.end(); ++it)
     {
-        ESP_LOGI(TAG, "%s\n", it->second->ap.ssid);
+        uint8_t* bssid = &it->second->ap.bssid[0];
+        printf("%02x:%02x:%02x:%02x:%02x:%02x %idBm %s\n", 
+            bssid[0],bssid[1],bssid[2],bssid[3],bssid[4],bssid[5],
+            it->second->ap.rssi,
+            it->second->ap.ssid);
     }
 }
     
