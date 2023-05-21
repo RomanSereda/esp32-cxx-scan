@@ -1,26 +1,35 @@
 #ifndef ESP_WLX_CXX_HPP_
 #define ESP_WLX_CXX_HPP_
 
-#include "esp_wifi.h"
 #include <map>
+#include <set>
 #include <memory>
+#include "time.h"
+#include "esp_wifi.h"
 
 namespace wlx_cxx {
+
+struct ap_info_t
+{
+    using ptr = std::shared_ptr<ap_info_t>;
+    wifi_ap_record_t ap;
+    time_t timestamp;
+};
+
 class wifi
 {
 public:
     void init();
     void create_sta();
-    void scan(const uint16_t max_wifi_records = 64);
+    void scan(const uint16_t max_records = 32);
     void destroy();
 
     void print();
 
 private:
-    using wifi_ap_record_ptr = std::shared_ptr<wifi_ap_record_t>;
-
-    esp_netif_t *esp_netif = nullptr;
-    std::map<uint32_t, wifi_ap_record_ptr> m_scan_data;
+    esp_netif_t *m_esp_netif = nullptr;
+    std::map<uint32_t, ap_info_t::ptr> m_scan_data;
+    std::set<time_t> m_tses;
 };  
 }
 
