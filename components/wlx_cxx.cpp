@@ -23,26 +23,21 @@ void wifi::create_sta()
     ESP_ERROR_CHECK(esp_wifi_start());
 }
 
-void wifi::scan(const uint16_t size)
+void wifi::scan(const uint16_t max_wifi_records)
 {
-    uint16_t size_buffer = size; 
-    wifi_ap_record_t* ap_info_buffer = new wifi_ap_record_t[size];
+    uint16_t wifi_records_count = max_wifi_records; 
+    std::unique_ptr<wifi_ap_record_t[]> wifi_records(new wifi_ap_record_t[max_wifi_records]);
 
     uint16_t ap_count = 0;
     ESP_ERROR_CHECK(esp_wifi_scan_start(NULL, true));
-    ESP_ERROR_CHECK(esp_wifi_scan_get_ap_records(&size_buffer, ap_info_buffer));
+    ESP_ERROR_CHECK(esp_wifi_scan_get_ap_records(&wifi_records_count, wifi_records.get()));
     ESP_ERROR_CHECK(esp_wifi_scan_get_ap_num(&ap_count));
 
-    for(int i = 0; (i < size_buffer) && (i < ap_count); ++i)
+    for(int i = 0; (i < wifi_records_count) && (i < ap_count); ++i)
     {
-        auto ap_info = &ap_info_buffer[i];
-        std::shared_ptr<wifi_ap_record_t> ptr = std::make_shared<wifi_ap_record_t>(*ap_info);
-        uint32_t id = 0;
-        memcpy(&id, (void*)&ap_info->bssid, sizeof(uint32_t));
-        m_scan_data.insert(std::pair<uint32_t, std::shared_ptr<wifi_ap_record_t>>(id, ptr));
+        auto ptr = wifi_ap_record_ptr(new wifi_ap_record_t(wifi_records[i]));
+        m_scan_data.insert({(*(uint32_t*)&ptr->bssid), ptr});
     }
-
-    delete[] ap_info_buffer;
 }
 
 void wifi::destroy()
@@ -55,7 +50,7 @@ void wifi::print()
 {
     for(auto it = m_scan_data.begin(); it != m_scan_data.end(); ++it)
     {
-        esp_rom_printf("%s\n", it->second->ssid);
+        ESP_LOGI(TAG, "%s\n", it->second->ssid);
     }
 }
     
